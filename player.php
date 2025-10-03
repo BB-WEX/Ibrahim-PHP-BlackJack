@@ -1,14 +1,16 @@
-<?php 
+<?php
 
- class player {
+class player
+{
     private $name;
     private $hand;
 
-    public function __construct($name) {
+    public function __construct($name)
+    {
         $this->name = $name;
 
         $this->hand = [];
     }
- }
+}
 
 ?>
