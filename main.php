@@ -8,11 +8,12 @@ require_once "dealer.php";
 
 // Initalise a new deck and shuffle
 $deck = new deck();
+$deck->initialise_deck();
 $deck->shuffle_deck();
 
 // Create an instanc of bothe player and dealer
 $player = new Player("Player");
-$player = new dealer("Dealer");
+$dealer = new dealer("Dealer");
 
 
 // Game logic
@@ -30,7 +31,7 @@ $player->display_hand();
 while ($player->calculate_hand_value() < 21) {
     // If hand less than 17 hit
     if ($player->calculate_hand_value() < 17) {
-        $plater->draw_card($deck->deal_card());
+        $player->draw_card($deck->deal_card());
         $player->display_hand();
     } else {
         break;
@@ -45,9 +46,7 @@ while ($dealer->calculate_hand_value() < 17) {
 
 // Display final hands
 echo "<br>Final Hands:<br>";
-echo "Dealer's Hand: ";
 $dealer->display_hand();
-echo "<br>Player's Hand: ";
 $player->display_hand();
 
 

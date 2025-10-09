@@ -39,12 +39,13 @@ class player
     // Method to show hand
     public function display_hand()
     {
-        echo "{$this->name}'s hand: ";
-        foreach ($this->hand as $card) { {
-                echo $card->getRank() . " of " . $card->getSuit() . ", ";
-            }
-            echo " Total value: " . $this->calculate_hand_value() . "<br>";
+        echo "{$this->name}'s hand:<br> ";
+        foreach ($this->hand as $card) {
+            echo "<ul>";
+            echo $card->getRank() . " of " . $card->getSuit() . ", <br>";
+            echo "</ul>";
         }
+        echo " Total value: " . $this->calculate_hand_value() . "<br>";
     }
 }
 

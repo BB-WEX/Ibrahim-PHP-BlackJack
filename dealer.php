@@ -12,8 +12,8 @@ class dealer extends player
     {
         if (count($this->hand) > 0) {
             $card = $this->hand[0];
-            echo "{$this->name}'s first card: " . $card->getRank() . " of " . $card->getSuit() . "<br>";
         }
+        echo "{$this->name}'s first card:<br> " . $card->getRank() . " of " . $card->getSuit() . "<br>";
     }
 }
 
