@@ -6,63 +6,86 @@ require_once "deck.php";
 require_once "player.php";
 require_once "dealer.php";
 
-// Initalise a new deck and shuffle
-$deck = new deck();
-$deck->initialise_deck();
-$deck->shuffle_deck();
+class BlackJack
+{
 
-// Create an instanc of bothe player and dealer
-$player = new Player("Player");
-$dealer = new dealer("Dealer");
+    public $deck;
+    public $player;
+    public $dealer;
 
+    public function __construct()
+    {
+        // Initalise a new deck and shuffle
+        $this->deck = new deck();
+        $this->deck->initialise_deck();
+        $this->deck->shuffle_deck();
 
-// Game logic
-// Deal initial cards
-$player->draw_card($deck->deal_card());
-$dealer->draw_card($deck->deal_card());
-$player->draw_card($deck->deal_card());
-$dealer->draw_card($deck->deal_card());
+        // Create an instanc of bothe player and dealer
+        $this->player = new Player("Player");
+        $this->dealer = new dealer("Dealer");
 
-// Display hands
-$dealer->display_first_card();
-$player->display_hand();
+    }
+    public function start_game()
+    {
+        // Deal initial cards
+        $this->player->draw_card($this->deck->deal_card());
+        $this->dealer->draw_card($this->deck->deal_card());
+        $this->player->draw_card($this->deck->deal_card());
+        $this->dealer->draw_card($this->deck->deal_card());
 
-// logic for player taking turns
-while ($player->calculate_hand_value() < 21) {
-    // If hand less than 17 hit
-    if ($player->calculate_hand_value() < 17) {
-        $player->draw_card($deck->deal_card());
-        $player->display_hand();
-    } else {
-        break;
+        // Display hands
+        $this->dealer->display_first_card();
+        $this->player->display_hand();
+
+        // logic for player taking turns
+        while ($this->player->calculate_hand_value() < 21) {
+            // If hand less than 17 hit
+            if ($this->player->calculate_hand_value() < 17) {
+                $this->player->draw_card($this->deck->deal_card());
+                $this->player->display_hand();
+            } else {
+                break;
+            }
+        }
+
+        // Dealer's turn logic
+        while ($this->dealer->calculate_hand_value() < 17) {
+            // IF hand less than 17 hit
+            $this->dealer->draw_card($this->deck->deal_card());
+        }
+
+        // Display final hands
+        echo "<br>Final Hands:<br>";
+        $this->dealer->display_hand();
+        $this->player->display_hand();
+
+        // winner
+        $this->determine_winner();
+
+    }
+
+    private function determine_winner()
+    {
+
+        // Determine winner through total scores
+        $player_total = $this->player->calculate_hand_value();
+        $dealer_total = $this->dealer->calculate_hand_value();
+
+        if ($player_total > 21) {
+            echo "Player busts! Dealer wins!";
+        } elseif ($dealer_total > 21) {
+            echo "Dealer busts! Player wins!";
+        } elseif ($player_total > $dealer_total) {
+            echo "Player wins with $player_total against dealer's $dealer_total!";
+        } elseif ($dealer_total > $player_total) {
+            echo "Dealer wins with $dealer_total against player's $player_total!";
+        } else {
+            echo "It's a tie at $player_total!";
+        }
     }
 }
 
-// Dealer's turn logic
-while ($dealer->calculate_hand_value() < 17) {
-    // IF hand less than 17 hit
-    $dealer->draw_card($deck->deal_card());
-}
+$game = new BlackJack();
+$game->start_game();
 
-// Display final hands
-echo "<br>Final Hands:<br>";
-$dealer->display_hand();
-$player->display_hand();
-
-
-// Determine winner through total scores
-$player_total = $player->calculate_hand_value();
-$dealer_total = $dealer->calculate_hand_value();
-
-if ($player_total > 21) {
-    echo "Player busts! Dealer wins!";
-} elseif ($dealer_total > 21) {
-    echo "Dealer busts! Player wins!";
-} elseif ($player_total > $dealer_total) {
-    echo "Player wins with $player_total against dealer's $dealer_total!";
-} elseif ($dealer_total > $player_total) {
-    echo "Dealer wins with $dealer_total against player's $player_total!";
-} else {
-    echo "It's a tie at $player_total!";
-}
 ?>
